@@ -3,10 +3,10 @@ export LC_COLLATE=C # Terminal Case Sensitive
 shopt -s extglob #import Advanced Regex
 
 if [ -d DBMS ] ; then
-    echo -e "\n -------- Welcome to B-DBMS ------------ \n"
+    echo -e "\n -------- B-DBMS Main Menu ------------ \n"
 else
     mkdir ./DBMS    #current Directory
-    echo -e "\n -------- Welcome to B-DBMS ------------ \n"
+    echo -e "\n -------- B-DBMS Main Menu ------------ \n"
 fi
 
 #Create Main Menu
@@ -35,16 +35,23 @@ do
         ;;
         "Exit" ) 
         
-             #Exit from B-DBMS
-             echo "
-            ----------------------------
-            | Good Bye See You Soon :) |
-            ----------------------------
-                     "
-             break
+            #Exit from B-DBMS
+            echo "
+        ----------------------------
+        | Good Bye See You Soon :) |
+        ----------------------------
+                    "
+            break
         ;;
         *) 
-            echo -e "\n|- Sorry, please select a number from the above Menu.- |\n"
+        : ' zenity --error \
+        --title "Error Message" \
+        --width 500 \
+        --height 100 \
+        --text " Sorry, please select a number from the above Menu." '
+        echo -e "\n--------------------------------------------------"
+        echo " Sorry, please select a number from the above Menu."
+        echo -e "--------------------------------------------------\n"
     esac
 done
 
