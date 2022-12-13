@@ -36,11 +36,15 @@ do
         "Exit" ) 
         
              #Exit from B-DBMS
-             echo -e "\n Good Bye See You Soon :)\n "
+             echo "
+            ----------------------------
+            | Good Bye See You Soon :) |
+            ----------------------------
+                     "
              break
         ;;
         *) 
-            echo "Sorry, please select a number from the above Menu."
+            echo -e "\n|- Sorry, please select a number from the above Menu.- |\n"
     esac
 done
 
