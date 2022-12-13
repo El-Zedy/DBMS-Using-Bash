@@ -1,33 +1,31 @@
 #!/bin/bash
-export LC_COLLATE=C # Terminal Case Sensitive
-shopt -s extglob #import Advanced Regex
+export LC_COLLATE=C                         #Terminal Case Sensitive
+shopt -s extglob                            #import Advanced Regex
 
+echo -n "   ==> Please Enter Database Name : "
+read  db_name 
 
-read -p "|--Please Enter Database Name : " db_name
-
-case $db_name in
+case $db_name in #check entered database name
 
     +([A-Za-z]))
 
-        if [ -d ./DBMS/$db_name ] ; then
+        if [ -d ./DBMS/$db_name ] ; then    #check if database name exsit in DBMS dir
 
-		    echo -e "
+        echo -e "
         --------------------------------------
         | Erorr! ($db_name) name is already exist.
         --------------------------------------
         "
-		    source	./createDB.sh
+        source	./createDB.sh               #call createDB again. 
+
 		else
 
-            mkdir ./DBMS/$db_name
-            echo -e "
-        ----------------------------------------
-        | Database ($db_name) created successfully.
-        ----------------------------------------
-             "
-              
-
-		fi          
+        mkdir ./DBMS/$db_name                   #if not exists create file at DBMS dir 
+        echo -e "
+        --------------------------------------------
+        | ($db_name) Database was created successfully.
+        --------------------------------------------"
+        fi          
     ;;
     *)
 		echo "
@@ -35,7 +33,7 @@ case $db_name in
         | Not Vaild Database name ! |
         -----------------------------
              "
-		source ./createDB.sh
+		source ./createDB.sh                       #call createDB again.
 
     ;;
     
