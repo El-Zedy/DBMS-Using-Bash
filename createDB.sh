@@ -4,6 +4,7 @@ shopt -s extglob                            #import Advanced Regex
 
 echo -n "   ==> Please Enter Database Name : "
 read  db_name 
+
 case $db_name in #check entered database name
 
     +([A-Za-z]))
