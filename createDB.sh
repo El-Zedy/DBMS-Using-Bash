@@ -20,11 +20,12 @@ case $db_name in #check entered database name
 
 		else
 
-        mkdir ./DBMS/$db_name                   #if not exists create file at DBMS dir 
+        mkdir ./DBMS/$db_name                #if not exists create file at DBMS dir 
         echo -e "
         --------------------------------------------
         | ($db_name) Database was created successfully.
         --------------------------------------------"
+        source ./master.sh
         fi          
     ;;
     *)

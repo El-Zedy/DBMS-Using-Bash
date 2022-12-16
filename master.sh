@@ -41,7 +41,7 @@ do
         | Good Bye See You Soon :) |
         ----------------------------
                     "
-            break
+            exit
         ;;
         *) 
         : ' zenity --error \
