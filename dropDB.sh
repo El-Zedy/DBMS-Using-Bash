@@ -7,7 +7,7 @@ read -p "   ==> Please enter the database name: " dbName
 case $dbName in                        #check entered database name
 
     +([A-Za-z]))
-
+  
       if [ -d ./DBMS/$dbName ] ; then  #check if database name exsit in DBMS dir
 
         rm -r ./DBMS/$dbName           #remove database dir
