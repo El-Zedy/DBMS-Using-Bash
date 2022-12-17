@@ -1,0 +1,4 @@
+field|type|key
+id|int|itIsPK
+age|int|	
+salary|int|	

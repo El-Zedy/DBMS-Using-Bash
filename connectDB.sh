@@ -2,6 +2,7 @@
 export LC_COLLATE=C # Terminal Case Sensitive
 shopt -s extglob #import Advanced Regex
 
+echo -e "\n  ---------------------------------"
 echo -n "   ==> Please Enter Database Name : "
 read  database 
 
