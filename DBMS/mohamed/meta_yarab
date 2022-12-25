@@ -1,0 +1,5 @@
+FieldName|FieldType|Key
+id|int|	
+name|string|	
+age|int|	
+address|string|	

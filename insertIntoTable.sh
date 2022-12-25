@@ -8,20 +8,20 @@ seperator="|"
 read -p "Enter table name: " table_name
 if [ -f $table_name ]
 then
-
-    num_fields=`awk -F "|" '{if(NR==1) print NF}' $table_name`    #get the number of fields in file(table name)
+      #get the number of fields in file(table name) 3ashan awk byd5lne fe loop f lazm a5le loop mra wa7da (NR==1)
+    num_fields=`awk -F "|" '{if(NR==1) print NF}' $table_name`  #get the number of fields
     
-    i=2
+    i=2   # assume i = 2 3ashan el meta_table eldata ely gwaha btbd2 mn awl elsf eltany 2nd record
     while [ $i -le $num_fields ]        #assume the min value of rows in meta_table_name file i=2
     do
         field_name=$(awk 'BEGIN{FS="|"}{ if(NR=='$i') print $1}' meta_$table_name)    #get the field name from meta_table_name file
         field_type=$(awk 'BEGIN{FS="|"}{ if(NR=='$i') print $2}' meta_$table_name)    #get the field type from meta_table_name file
         field_pk=$(awk 'BEGIN{FS="|"}{ if(NR=='$i') print $3}' meta_$table_name)      #get the field pk from meta_table_name file
 
-        read -p "Please,Enter the value of field ( $field_name ) :" value           #get the value you wanted to add to the field name
+        read -p "Please,Enter the value of field ( $field_name ) :" value           #assume the the data in field name is called value
 
 
-        if [[ "$field_type" = "int" ]]           #if the value was integer 
+        if [[ "$field_type" = "int" ]]     #if the field you want to add its type was : integer 
         then
 
             while ! [[ "$value" =~ ^[0-9]+$ && -n "$value" ]]      #while value is NOT numbers and not null value
@@ -44,17 +44,14 @@ then
 
         if [ "$field_pk" = "itIsPK" ]
         then
-
-            result=$(for i in `awk -F"|" '{if(NR > 3) print $1}' $table_name`;do echo $i;done)
-
-            for x in `echo $result`
+            while [[ true ]]
             do
-
-                if [ "$x" = "$value" ]
+                if [[ $value =~ ^[`awk 'BEGIN{FS="|"}{if(NR != 1)print $(('$i'-1))}' $table_name`]$ ]]
                 then
-
                     echo -e "Error! THIS IS A REPEATED PRIMARY KEY !!!"
                     read -p "Please,Enter the value of field ( $field_name ) :" value
+                else
+                    break
                 fi
             done
         fi

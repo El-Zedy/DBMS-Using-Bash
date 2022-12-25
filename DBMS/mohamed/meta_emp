@@ -1,0 +1,5 @@
+field|type|key
+id|int|itIsPK
+name|int|	
+age|int|	
+address|string|	
