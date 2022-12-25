@@ -32,13 +32,12 @@ do
             source ../../tableMenu.sh
         ;;
         "Insert Into Table" ) 
-        
             source ../../insertIntoTable.sh
             source ../../tableMenu.sh
         ;;
         "Delete From Table" ) 
-        
-            source ../../deleteFromTable.sh
+            source ../../tseinggg.sh
+            #source ../../deleteFromTable.sh
             source ../../tableMenu.sh
         ;;
         "Update Table" ) 

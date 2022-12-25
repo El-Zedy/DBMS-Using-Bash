@@ -11,8 +11,8 @@ case $tableName in
 
     +([A-Za-z]))
 
-        if [ -f ./$tableName ]                   #check Table existance
-        then                       
+        if [ -f ./$tableName ]
+        then
             echo -e "\n-------------------------------------------"
             echo "   Error! ($tableName) is already exist."
             echo -e "--------------------------------------------\n"
@@ -20,10 +20,10 @@ case $tableName in
             # take number from user and checks it's a valid number
             echo -n "   ==> Please Enter number of Fields: "
             read numOfFields
-
-            # check $numOfFields is a special character or empty value or a string
-            while ! [[ "$numOfFields" =~ ^[0-9]+$ ]];       # =~ A regular expression matching sign
-            do
+ 
+            #check $numOfFields is a special character or empty value or a string
+            while ! [[ $numOfFields =~ ^[0-9]+$ ]]
+            do 
                 echo -e "\n------------------------------------------"
                 echo -e "   Error! Please enter a Valid number."
                 echo -e "------------------------------------------\n"
@@ -31,32 +31,32 @@ case $tableName in
                 read numOfFields   
             done
 
-            primary_key="" 
-            num=1                                           #Counter                              
-            # Start point of the loop
-            while (( $num <= $numOfFields ))
+            ########################### hnan m3aya tablename not exisit and nom of fields ##################
+            primary_key=""
+            num=1
+            while (( $num <= $numOfFields)) #while num of fields akbr mn 1 bigin to take these fields values
             do
-                # take fields names from the user 
+
+                #===1====== take fields names from the user:
                 echo -e "  \n   ------------------------------"  
                 read -p "   ==> Enter name of field no.$num: " fieldName
-                                
-                while ! [[ $fieldName = +([A-Za-z]) ]]; #if fieldName not equal set of chars
-                do                   
+                
+                while ! [[ $fieldName = +([A-Za-z]) ]] #lw el field name msh string
+                do
                     echo -e "\n-------------------------------"
                     echo -e "   Error! invalid field name."
                     echo -e "-------------------------------\n"
                     echo -e "  \n   ------------------------------"
                     read -p "   ==> Enter Name of field no.$num: " fieldName
-
                 done
 
-                # Select the field type
+                #===2====== select each field type:
                 echo -e "\n-------------------------------"
                 echo -e "  Choose Type of field ($fieldName):"
-                echo -e "-------------------------------\n"
-                
+                echo -e "-------------------------------\n" 
+
                 select dType in "integer" "string"
-                do
+                do 
                 case $dType in
                     integer )
                         fieldType="int";
@@ -75,70 +75,68 @@ case $tableName in
                 done
 
                 newLine="\n"
-                seperator="|"                                                                           
-                meta_data="field"$seperator"type"$seperator"key" ##===> field | type | key
+                seperator="|"
+                #meta_data="FieldName"$seperator"DataType"$seperator"Key" ###Meta Table Strucure
 
-                #Check is there a primary key 
-                while [ "$primary_key" == "" ]   # while pk = empty string ask him
+                #===3====== check for primary key:
+                while [ "$primary_key" == "" ]
                 do
                     echo -e "\n-----------------------------------------"
                     echo -e "  Do you want this field as Primary Key?"
                     echo -e "-----------------------------------------\n"
 
-                    select answer in "yes" "no"
+                    select check in "yes" "no"
                     do
-                        case $answer in
-
-                        yes ) 
-                            primary_key="itIsPK";
-                            meta_data=$newLine$fieldName$seperator$fieldType$seperator$primary_key; #\n filedname | Data type | pk
+                        case $check in
+                        yes )
+                            primary_key="itIsPK"
                             break
                         ;;
                         no ) 
                             primary_key="notPK";
-                            meta_data=$newLine$fieldName$seperator$fieldType$seperator$primary_key;
                             break
                         ;;
-
                         * ) 
                             echo -e "\n------------------------------------"
                             echo -e "  Error! Please enter a valid answer."
                             echo -e "-------------------------------------\n"                        
                         ;;
                         esac
-                    done                            
+                    done
                 done
-                
-                if [ "$primary_key" == "notPK" ]
+
+                if [ "$primary_key" == "notPK" ]   #lw msh pk 5ali elfield bta3o fadi
                 then
                         primary_key=""
                 fi
-
-                myarray[$num]=$fieldName$seperator$fieldType$seperator$primary_key # myarray[1] = Field Name | data type | pk
-
+                
+                ########## final array b3dd el fields el d5lh with all data         #Field Name | Field Type | Key
+                metadataValues[$num]=$fieldName$seperator$fieldType$seperator$primary_key  # salary    |   int      |
+                
                 if [ "$primary_key" == "itIsPK" ]  
                 then
-                        primary_key="\t"                                            
+                        primary_key="\t"                                    
+                                
                 fi
+
                 (( num++ ))
-
             done
-            #End point of the loop
+            ###########END OF LOOP With Field Name , Type , and is pk or not
 
-            #insert 
             touch $tableName
             touch meta_$tableName
 
-            echo -e "field"$seperator"type"$seperator"key" >> meta_$tableName #field | datatype | pk
+            ############ 1- append in meta_table ==> Field Name | Field Type | Key
+            echo -e "FieldName"$seperator"FieldType"$seperator"Key" >> meta_$tableName  #A) First Row
             
-            for i in ${myarray[*]}
+            for i in ${metadataValues[*]} 
             do
-                echo -e "$i" >> meta_$tableName   #append data comes with array at metadata                            
-                
+                echo -e $i >> meta_$tableName                                                  #B) Athor rows
             done
-                
-            awk '(NR>1)' meta_$tableName | cut -d "|" -f 1 | awk  '{ printf "%s | ",$1 }' > $tableName #from metadata second row cut first columns and append it at first row in afile by default  #$1 first colum
-            echo "" >> $tableName                                           
+            
+            #from metadata second row cut first columns and append it at first row in afile by default  #$1 first colum
+            awk 'NR>1' meta_$tableName | cut -d "|" -f 1 | awk '{printf "%s|",$1}' > $tableName  
+            echo "" >> $tableName
 
             if [ $? -eq 0 ] #if last command true returns a status of 0
             then
@@ -150,12 +148,11 @@ case $tableName in
                     echo -e "  Error! Creating table $tableName Faild. "
                     echo -e "----------------------------------------\n"
             fi
-       fi
-        ;;      
-
-    *)
-        echo -e "\n----------------------------------------------------"
-        echo -e "   Error! invalid table name, Press enter to continue.."
-        echo -e "----------------------------------------------------\n"
+        fi
+    ;;      
+    *)        
+    echo -e "\n----------------------------------------------------"
+    echo -e "   Error! invalid table name, Press enter to continue.."
+    echo -e "----------------------------------------------------\n"
     ;;      
 esac 
