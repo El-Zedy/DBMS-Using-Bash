@@ -32,9 +32,8 @@ case $tableName in
             done
 
             ########################### hnan m3aya tablename not exisit and nom of fields ##################
-            
-            num=1
             primary_key=""
+            num=1
             while (( $num <= $numOfFields)) #while num of fields akbr mn 1 bigin to take these fields values
             do
 
@@ -75,10 +74,9 @@ case $tableName in
                 esac
                 done
 
-                
                 newLine="\n"
                 seperator="|"
-                meta_data="FieldName"$seperator"DataType"$seperator"Key" ###Meta Table Strucure
+                #meta_data="FieldName"$seperator"DataType"$seperator"Key" ###Meta Table Strucure
 
                 #===3====== check for primary key:
                 while [ "$primary_key" == "" ]
@@ -92,13 +90,10 @@ case $tableName in
                         case $check in
                         yes )
                             primary_key="itIsPK"
-                            #meta_data=$newLine$fieldName$seperator$fieldType$seperator$primary_key;
                             break
                         ;;
                         no ) 
                             primary_key="notPK";
-                            
-                            #meta_data=$newLine$fieldName$seperator$fieldType$seperator$primary_key;
                             break
                         ;;
                         * ) 
@@ -113,13 +108,17 @@ case $tableName in
                 if [ "$primary_key" == "notPK" ]   #lw msh pk 5ali elfield bta3o fadi
                 then
                         primary_key=""
-                else
-                        primary_key="\t"
                 fi
                 
                 ########## final array b3dd el fields el d5lh with all data         #Field Name | Field Type | Key
                 metadataValues[$num]=$fieldName$seperator$fieldType$seperator$primary_key  # salary    |   int      |
-             
+                
+                if [ "$primary_key" == "itIsPK" ]  
+                then
+                        primary_key="\t"                                    
+                                
+                fi
+
                 (( num++ ))
             done
             ###########END OF LOOP With Field Name , Type , and is pk or not
@@ -130,18 +129,22 @@ case $tableName in
             ############ 1- append in meta_table ==> Field Name | Field Type | Key
             echo -e "FieldName"$seperator"FieldType"$seperator"Key" >> meta_$tableName  #A) First Row
             
-            for i in ${metadataValues[*]}
+            for i in ${metadataValues[*]} 
             do
                 echo -e $i >> meta_$tableName                                                  #B) Athor rows
             done
             
             #from metadata second row cut first columns and append it at first row in afile by default  #$1 first colum
-            awk 'NR>1' meta_$tableName | cut -d "|" -f 1 | awk '{printf "%s | ",$1}' > $tableName
-            echo "" >> $tableName
+            awk 'NR>1' meta_$tableName | cut -d "|" -f 1 | awk '{printf "%s|",$1}' > $tableName
+            sed -i 's/\(.*\)|$/\1/' $tableName
+            echo -e "\n" >> $tableName
+
             if [ $? -eq 0 ] #if last command true returns a status of 0
             then
+                    clear
                     echo -e "\n---------------------------------------"
                     echo -e "  Table $tableName is Created Successfully :) "
+                    echo -e "  Please, press Enter to continue. "
                     echo -e "---------------------------------------\n" 
             else
                     echo -e "\n---------------------------------------"
@@ -149,10 +152,10 @@ case $tableName in
                     echo -e "----------------------------------------\n"
             fi
         fi
-        ;;      
-        *)
-            echo -e "\n----------------------------------------------------"
-            echo -e "   Error! invalid table name, Press enter to continue.."
-            echo -e "----------------------------------------------------\n"
-         ;;      
-esac 
+    ;;      
+    *)        
+    echo -e "\n----------------------------------------------------"
+    echo -e "   Error! invalid table name, Press enter to continue.."
+    echo -e "----------------------------------------------------\n"
+    ;;      
+esac
