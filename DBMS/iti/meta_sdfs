@@ -1,4 +1,4 @@
 FieldName|FieldType|Key
 id|int|itIsPK
+age|int|	
 sal|int|	
-name|string|	
