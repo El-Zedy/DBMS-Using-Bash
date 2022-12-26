@@ -2,7 +2,9 @@
 export LC_COLLATE=C # Terminal Case Sensitive
 shopt -s extglob #import Advanced Regex
 
-echo -e "\n  ---------------------------------"
+echo -e "\n -------- DATABASES TO CONNECT ---------- \n"
+ls -F ./DBMS | grep / | sed -r 's/\S\s*$//' |column -t
+echo -e "\n"
 echo -n "   ==> Please Enter Database Name : "
 read  database 
 
@@ -12,12 +14,11 @@ case $database in
 
         if [ -d ./DBMS/$database ]         #check if dbname exist on DBMS Dir or not
         then                               #if yes 
-
-            echo -e "\n-------------------------------------------------"
-            echo "   ($database) database exist and your are in it now."
-            echo -e "-------------------------------------------------\n"
+            clear
+            echo -e "\n--------------------------------------------------"
+            echo "   ($database) database is exist and you are in it now."
+            echo -e "---------------------------------------------------\n"
             cd ./DBMS/$database             #cd to it
-            pwd
             source ../../tableMenu.sh       #then call tableMenu script
                     
         else

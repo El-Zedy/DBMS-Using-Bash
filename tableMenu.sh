@@ -13,8 +13,8 @@ do
         ;;
         "List Table" )
 
-            ls ./                           #list current dir
-            source ../../tableMenu.sh
+                                          #list current dir
+            source ../../listTables.sh
         ;;
         "Drop Table" ) 
 

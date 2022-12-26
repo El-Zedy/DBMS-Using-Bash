@@ -1,7 +1,7 @@
 #!/bin/bash
 export LC_COLLATE=C                     # Terminal Case Sensitive
 shopt -s extglob                        #import Advanced Regex
-
+ls -F ./DBMS | grep / | sed -r 's/\S\s*$//' |column -t
 read -p "   ==> Please enter the database name: " dbName
 
 case $dbName in                        #check entered database name
