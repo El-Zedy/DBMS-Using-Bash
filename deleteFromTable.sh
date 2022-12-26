@@ -51,33 +51,76 @@ do
             echo -e "================================\n"
 
 			echo -e "  \n   -----------------------------------------------"
-			echo -n "   ==> Please Enter Column ID For The Row Y Want to Delete: "
-            read colId
+			echo -n "   ==> Please Enter Column Name For Condition: "
+            read colName
 			echo ""
-            while ! [[ $colId =~ ^[1-9]+$ ]] #lw el colName name msh string
+            while ! [[ $colName = +([A-Za-z]) ]] #lw el colName name msh string
                 do
                     echo -e "\n-------------------------------"
-                    echo -e "   Error! Invalid Column ID."
+                    echo -e "   Error! Invalid Column Name."
                     echo -e "-------------------------------\n"
-                    echo -e "  \n   --------------------------------------------------------"
-                    read -p "   ==> Please Enter Column ID For The Row Y Want to Delete:" colId
+                    echo -e "  \n   -----------------------------------------------"
+                    read -p "   ==> Please Enter Column Name For Condition:" colName
                 done
-                
-                etc=$(awk -F "|" '{if($1=='"$colId"') print $0}' $tableName) 
-                sed -i '$etcd' $tableName 2>>./.error.log
+                                            #id | name | sal   yyyyy
+            colId=$(awk '                                  
+                    BEGIN{FS="|"} 
+                    {
+                        if(NR==1)
+                        {
+                            for(i=1;i<=NF;i++)
+                            {
+                                if($i=="'$colName'") 
+                                    print i
+                            }
+                        }
+                    } ' $tableName) #field num 
 
-                if [ $? -eq 0 ] #if last command true returns a status of 0
+            if [[ $colId == "" ]]
+            then
+                echo -e "\n-------------------------------"
+                echo -e "  Column ($colName) Not Found! "
+                echo -e "-------------------------------\n"
+                source ../../tableMenu.sh
+            else
+                echo -e "\n  ---------------------------------------------------"
+			    echo  "   ==> Enter any value in Row Related to Column you "		
+			    echo -n "   entered before to delete row contains this value: "
+                read val
+
+                res=$(awk '
+                    BEGIN{FS="|"}
+                    {
+                        if ($'$colId'=="'$val'") 
+                            print $'$colId'
+                    } ' $tableName )    # tl3na bl3mod kolo $i
+                if [[ $res == "" ]]
                 then
-                        echo -e "\n---------------------------------------"
-                        echo -e "  Table Data is deleted Successfully :) "
-                        echo -e "---------------------------------------\n" 
+                    echo -e "\n-------------------------------------------------------"
+					echo -e "  ($val) Not Found At The Column ($colName) you Enterd Before"
+					echo -e "---------------------------------------------------------\n"
+                    source ../../tableMenu.sh
                 else
-                        echo -e "\n---------------------------------------"
-                        echo -e "  Error! Deleting table data Failed. "
-                        echo -e "----------------------------------------\n"
+                    NR=$(awk '
+                        BEGIN{FS="|"}
+                        {
+                            if ($'$colId'=="'$val'") 
+                                print NR
+                        } ' $tableName ) # loop on col values and check his value on it or not and print number of r if found
+
+                    sed -i ''$NR'd' $tableName 
+
+                    echo -e "\n----------------------------"
+				    echo -e "  Row Deleted Successfully"
+				    echo -e "-----------------------------\n"
+                    source ../../tableMenu.sh
                 fi
+            fi
         else
-         echo "error"
+                echo -e "\n--------------------------------------"
+                echo -e " Error! Table Name Inavlid Or Not Found."
+                echo -e "---------------------------------------\n"
+                source ../../tableMenu.sh
         fi
         ;;        
         "Back" )

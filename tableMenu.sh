@@ -13,8 +13,8 @@ do
         ;;
         "List Table" )
 
-            ls ./                           #list current dir
-            source ../../tableMenu.sh
+                                          #list current dir
+            source ../../listTables.sh
         ;;
         "Drop Table" ) 
 
@@ -32,12 +32,13 @@ do
             source ../../tableMenu.sh
         ;;
         "Insert Into Table" ) 
+        
             source ../../insertIntoTable.sh
             source ../../tableMenu.sh
         ;;
         "Delete From Table" ) 
-            source ../../tseinggg.sh
-            #source ../../deleteFromTable.sh
+        
+            source ../../deleteFromTable.sh
             source ../../tableMenu.sh
         ;;
         "Update Table" ) 

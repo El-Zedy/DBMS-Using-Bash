@@ -135,13 +135,16 @@ case $tableName in
             done
             
             #from metadata second row cut first columns and append it at first row in afile by default  #$1 first colum
-            awk 'NR>1' meta_$tableName | cut -d "|" -f 1 | awk '{printf "%s|",$1}' > $tableName  
-            echo "" >> $tableName
+            awk 'NR>1' meta_$tableName | cut -d "|" -f 1 | awk '{printf "%s|",$1}' > $tableName
+            sed -i 's/\(.*\)|$/\1/' $tableName
+            echo -e "\n" >> $tableName
 
             if [ $? -eq 0 ] #if last command true returns a status of 0
             then
+                    clear
                     echo -e "\n---------------------------------------"
                     echo -e "  Table $tableName is Created Successfully :) "
+                    echo -e "  Please, press Enter to continue. "
                     echo -e "---------------------------------------\n" 
             else
                     echo -e "\n---------------------------------------"
@@ -155,4 +158,4 @@ case $tableName in
     echo -e "   Error! invalid table name, Press enter to continue.."
     echo -e "----------------------------------------------------\n"
     ;;      
-esac 
+esac
